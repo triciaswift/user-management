@@ -30,6 +30,7 @@ export const UserList = () => {
   return (
     <section>
       <h1>Welcome to User Management!</h1>
+      <p>Click on a user to edit</p>
       {loading ? (
         <p>Loading...</p>
       ) : error ? (

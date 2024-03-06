@@ -7,8 +7,10 @@ import { UserForm } from "./components/UserForm";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<UserList />} />
-      <Route path=":userId/edit" element={<UserForm />} />
+      <Route path="/">
+        <Route index element={<UserList />} />
+        <Route path=":userId/edit" element={<UserForm />} />
+      </Route>
     </Routes>
   );
 }
