@@ -1,5 +1,5 @@
 type FormInputProps = {
-  type: "text" | "radio";
+  type: "text" | "radio" | "email";
   name: string;
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -31,7 +31,18 @@ export const FormInput = ({
           required
         />
       );
-    case "text":
+    case "email":
+      return (
+        <input
+          id={name}
+          name={name}
+          className="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-blue-300"
+          type="email"
+          value={value}
+          onChange={onChange}
+          required
+        />
+      );
     default:
       return (
         <input

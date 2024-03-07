@@ -57,7 +57,7 @@ export const UserForm = ({
           onSubmit={handleSave}
         >
           <h2 className="user-form-title text-2xl font-bold text-center mb-4 text-gray-800">
-            Edit User
+            {initialValues.id ? "Edit User" : "New User"}
           </h2>
 
           {/* first name */}
@@ -97,7 +97,7 @@ export const UserForm = ({
             <FormInput
               name="email"
               value={user.email}
-              type="text"
+              type="email"
               placeholder="Email"
               onChange={handleInputChange}
             />

@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { User } from "../../types/User";
 import { useEffect, useState } from "react";
 import { editUser, getUserById } from "../../services/userService";
@@ -6,11 +6,11 @@ import { UserForm } from "./UserForm";
 
 export const EditUser = () => {
   const { userId } = useParams<{ userId: string }>();
+  const navigate = useNavigate();
 
   const [user, setUser] = useState<User>({} as User);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -37,12 +37,13 @@ export const EditUser = () => {
     fetchUser();
   }, [userId]);
 
-  const handleUserSave = async () => {
-    if (user) {
+  const handleUserSave = async (updatedUser: User) => {
+    if (updatedUser && updatedUser.id !== undefined) {
+      setLoading(true);
       try {
-        setLoading(true);
-        await editUser(user);
-        setSuccessMessage("User's information was updated successfully!"); // Set the success message
+        await editUser(updatedUser);
+        alert("User's information was updated successfully!");
+        navigate(`/`);
       } catch (error) {
         console.error("Failed to save user:", error);
         setError("Failed to save user. Please try again later.");
@@ -76,27 +77,6 @@ export const EditUser = () => {
         </Link>
       </div>
     );
-
-  if (successMessage) {
-    // If there is a success message, render it instead of the form
-    return (
-      <section className="flex flex-col justify-center items-center h-screen">
-        <div
-          className="success-message flex flex-col items-center bg-green-100 border-green-700 border-2 text-green-700 px-4 py-3 rounded relative"
-          role="alert"
-        >
-          <strong className="font-bold">Success!</strong>
-          <span className="block sm:inline">{successMessage}</span>
-        </div>
-        <Link
-          to={`/`}
-          className="mt-4 text-blue-500 hover:text-blue-700 underline"
-        >
-          Return to list of users
-        </Link>
-      </section>
-    );
-  }
 
   return (
     <UserForm

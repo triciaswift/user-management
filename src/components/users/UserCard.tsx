@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { User } from "../../types/User";
+import { deleteUser } from "../../services/userService";
 
 interface UserCardProp {
   user: User;
@@ -30,6 +31,21 @@ export const UserCard = ({ user }: UserCardProp) => {
           </h2>
           <p className="user--email text-sm text-gray-600">{user.email}</p>
         </div>
+        <button
+          className="btn mt-8 bg-red-500 hover:bg-red-700 text-sm text-white py-1 px-4 rounded focus:outline-none focus:shadow-outline"
+          onClick={async (event) => {
+            event.stopPropagation();
+
+            if (user.id !== undefined) {
+              await deleteUser(user.id);
+              alert(
+                `${user.firstName} ${user.lastName} was successfully deleted.`
+              );
+            }
+          }}
+        >
+          Delete
+        </button>
       </article>
     </li>
   );
