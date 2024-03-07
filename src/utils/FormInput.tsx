@@ -1,3 +1,4 @@
+// Define the properties expected by the FormInput component.
 type FormInputProps = {
   type: "text" | "radio" | "email";
   name: string;
@@ -9,6 +10,9 @@ type FormInputProps = {
   error?: string;
 };
 
+//! Note: Instead of the validation for empty inputs, could also use the required property
+
+// A reusable FormInput component that renders different types of input elements based on the provided props.
 export const FormInput = ({
   type,
   name,
@@ -21,6 +25,7 @@ export const FormInput = ({
 }: FormInputProps) => {
   let inputElement;
 
+  // Switch statement to determine the input element based on the type prop.
   switch (type) {
     case "radio":
       inputElement = (
@@ -66,6 +71,7 @@ export const FormInput = ({
       break;
   }
 
+  // Render the input element and any error message.
   return (
     <div>
       {inputElement}

@@ -4,58 +4,80 @@ import { FormInput } from "../../utils/FormInput";
 import ReactDatePicker from "react-datepicker";
 import { states } from "../../utils/states";
 
+// Props definition for the UserForm component.
 interface UserFormProps {
-  initialValues: User;
-  onSave: (user: User) => void;
+  initialValues: User; // Initial user values, for creating or editing.
+  onSave: (user: User) => void; // Function to call when the form is submitted.
 }
 
+// The UserForm component, responsible for creating and editing user details.
 export const UserForm = ({ initialValues, onSave }: UserFormProps) => {
-  // form state
+  // Local state for the form, using the initial user values.
   const [user, setUser] = useState<User>(initialValues);
+
+  // Local state for the date picker, to handle user's birth date selection.
   const [startDate, setStartDate] = useState<Date | null>(
     initialValues.birthDate ? new Date(initialValues.birthDate) : null
   );
+
+  // Local state for tracking form input errors.
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // Validates the form fields aren't empty...could also use the required property
+  // Function to validate form inputs.
   const validate = (): boolean => {
-    let isValid = true;
-    let errors: Record<string, string> = {};
+    let isValid = true; // Flag to indicate if the form is valid.
+    let errors: Record<string, string> = {}; // Local errors object for capturing input-specific errors.
 
-    // Check for empty fields
+    // Validation for firstName: must not be empty.
     if (!user.firstName) {
       isValid = false;
       errors.firstName = "First name is required";
     }
+
+    // Validation for firstName: must not be empty.
     if (!user.lastName) {
       isValid = false;
       errors.lastName = "Last name is required";
     }
+
+    // Validation for firstName: must not be empty.
     if (!user.email) {
       isValid = false;
       errors.email = "Email is required";
     }
+
+    // Validation for firstName: must not be empty.
     if (!user.birthDate) {
       isValid = false;
       errors.birthDate = "Date of birth is required";
     }
+
+    // Validation for firstName: must not be empty.
     if (!user.address?.address) {
       isValid = false;
       errors.address = "Street address is required";
     }
+
+    // Validation for firstName: must not be empty.
     if (!user.address?.city) {
       isValid = false;
       errors.city = "City is required";
     }
+
+    // Validation for firstName: must not be empty.
     if (!user.address?.postalCode.match(/^[0-9]{5}(-[0-9]{4})?$/)) {
       isValid = false;
       errors.postalCode = "Postal code is invalid";
     }
+
+    // Validation for firstName: must not be empty.
     if (!user.address?.state) {
       isValid = false;
       errors.state = "State is required";
-    } else {
-      // Update this to check the birthDate state
+    }
+
+    // If the user has entered a birthDate, check if it's within the acceptable date range.
+    if (user.birthDate) {
       const minDate = new Date("1900-01-01");
       const maxDate = new Date("2100-12-31");
       const birthDate = new Date(user.birthDate);
@@ -66,10 +88,11 @@ export const UserForm = ({ initialValues, onSave }: UserFormProps) => {
       }
     }
 
-    setErrors(errors);
-    return isValid;
+    setErrors(errors); // Update the state with the errors found.
+    return isValid; // Return the validity status of the form.
   };
 
+  // Event handler for form input & select changes.
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -91,6 +114,7 @@ export const UserForm = ({ initialValues, onSave }: UserFormProps) => {
     }
   };
 
+  // Event handler for form submission.
   const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (validate()) {
@@ -98,7 +122,9 @@ export const UserForm = ({ initialValues, onSave }: UserFormProps) => {
     }
   };
 
+  // Function to render the form elements.
   const form = () => {
+    // Render form if user and user.address are defined.
     if (user && user.address) {
       return (
         <form
@@ -294,5 +320,6 @@ export const UserForm = ({ initialValues, onSave }: UserFormProps) => {
     }
   };
 
+  // Render the form section
   return <section className="mt-10">{form()}</section>;
 };

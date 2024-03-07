@@ -2,13 +2,16 @@ import { useNavigate } from "react-router-dom";
 import { User } from "../../types/User";
 import { deleteUser } from "../../services/userService";
 
+// Define the props expected by the UserCard component.
 interface UserCardProp {
   user: User;
 }
 
+// The UserCard component displays a single user's information in a card format.
 export const UserCard = ({ user }: UserCardProp) => {
   const navigate = useNavigate();
 
+  // Render a list item for each user
   return (
     <li
       key={user.id}
