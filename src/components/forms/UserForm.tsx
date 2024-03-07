@@ -1,56 +1,105 @@
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { User } from "../../types/User";
 import { FormInput } from "../../utils/FormInput";
+import ReactDatePicker from "react-datepicker";
+import { states } from "../../utils/states";
 
 interface UserFormProps {
-  initialValues: User; // This will either be an empty User object or a populated one
-  onSave: (user: User) => void; // A callback to handle saving the user
-  setLoading: (loading: boolean) => void;
+  initialValues: User;
+  onSave: (user: User) => void;
 }
 
-export const UserForm = ({
-  initialValues,
-  onSave,
-  setLoading,
-}: UserFormProps) => {
+export const UserForm = ({ initialValues, onSave }: UserFormProps) => {
   // form state
   const [user, setUser] = useState<User>(initialValues);
+  const [startDate, setStartDate] = useState<Date | null>(
+    initialValues.birthDate ? new Date(initialValues.birthDate) : null
+  );
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+  // Validates the form fields aren't empty...could also use the required property
+  const validate = (): boolean => {
+    let isValid = true;
+    let errors: Record<string, string> = {};
+
+    // Check for empty fields
+    if (!user.firstName) {
+      isValid = false;
+      errors.firstName = "First name is required";
+    }
+    if (!user.lastName) {
+      isValid = false;
+      errors.lastName = "Last name is required";
+    }
+    if (!user.email) {
+      isValid = false;
+      errors.email = "Email is required";
+    }
+    if (!user.birthDate) {
+      isValid = false;
+      errors.birthDate = "Date of birth is required";
+    }
+    if (!user.address?.address) {
+      isValid = false;
+      errors.address = "Street address is required";
+    }
+    if (!user.address?.city) {
+      isValid = false;
+      errors.city = "City is required";
+    }
+    if (!user.address?.postalCode.match(/^[0-9]{5}(-[0-9]{4})?$/)) {
+      isValid = false;
+      errors.postalCode = "Postal code is invalid";
+    }
+    if (!user.address?.state) {
+      isValid = false;
+      errors.state = "State is required";
+    } else {
+      // Update this to check the birthDate state
+      const minDate = new Date("1900-01-01");
+      const maxDate = new Date("2100-12-31");
+      const birthDate = new Date(user.birthDate);
+      if (birthDate < minDate || birthDate > maxDate) {
+        isValid = false;
+        errors.birthDate =
+          "Date of birth must be between 01-01-1900 and 12-31-2100";
+      }
+    }
+
+    setErrors(errors);
+    return isValid;
+  };
+
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = event.target;
 
-    setUser((currentUser) => {
-      if (
-        name === "address" ||
-        name === "city" ||
-        name === "postalCode" ||
-        name === "state"
-      ) {
-        return {
-          ...currentUser,
-          address: {
-            ...currentUser.address,
-            [name]: value,
-          },
-        };
-      }
-
-      return {
+    if (name in user.address) {
+      setUser((currentUser) => ({
+        ...currentUser,
+        address: {
+          ...currentUser.address,
+          [name]: value,
+        },
+      }));
+    } else {
+      setUser((currentUser) => ({
         ...currentUser,
         [name]: value,
-      };
-    });
+      }));
+    }
   };
 
   const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setLoading(true);
-    await onSave(user);
-    setLoading(false);
+    if (validate()) {
+      await onSave(user);
+    }
   };
 
   const form = () => {
-    if (user) {
+    if (user && user.address) {
       return (
         <form
           className="user-form border w-full max-w-lg mx-auto bg-gray-100 shadow-md rounded px-8 pt-6 pb-8 mb-4"
@@ -72,6 +121,7 @@ export const UserForm = ({
               onChange={handleInputChange}
               placeholder="First Name"
               autoFocus={true}
+              error={errors.firstName}
             />
           </div>
 
@@ -86,6 +136,7 @@ export const UserForm = ({
               value={user.lastName}
               onChange={handleInputChange}
               placeholder="Last Name"
+              error={errors.lastName}
             />
           </div>
 
@@ -100,6 +151,7 @@ export const UserForm = ({
               type="email"
               placeholder="Email"
               onChange={handleInputChange}
+              error={errors.email}
             />
           </div>
 
@@ -108,13 +160,26 @@ export const UserForm = ({
             <label htmlFor="birthDate" className="text-gray-700">
               Date of birth:{" "}
             </label>
-            <FormInput
-              name="birthDate"
-              value={user.birthDate}
-              type="text"
-              placeholder="Date of birth"
-              onChange={handleInputChange}
+            <ReactDatePicker
+              selected={startDate}
+              onChange={(date: Date) => {
+                setStartDate(date);
+                const localDate = new Date(date.setHours(0, 0, 0, 0));
+                setUser({
+                  ...user,
+                  birthDate: localDate.toISOString().split("T")[0],
+                });
+              }}
+              dateFormat={"yyyy-MM-dd"}
+              maxDate={new Date("2100-12-31")}
+              minDate={new Date("1900-01-01")}
+              wrapperClassName="w-full"
+              className="form-control"
+              placeholderText="Date of birth"
             />
+            {errors.birthDate && (
+              <p className="text-red-500 text-xs italic">{errors.birthDate}</p>
+            )}
           </div>
 
           {/* gender */}
@@ -159,9 +224,10 @@ export const UserForm = ({
                 <FormInput
                   name="address"
                   type="text"
-                  value={user.address?.address || ""}
+                  value={user.address.address}
                   onChange={handleInputChange}
                   placeholder="Street Address"
+                  error={errors.address}
                 />
               </div>
 
@@ -172,9 +238,10 @@ export const UserForm = ({
                 <FormInput
                   name="city"
                   type="text"
-                  value={user.address?.city || ""}
+                  value={user.address.city}
                   onChange={handleInputChange}
                   placeholder="City"
+                  error={errors.city}
                 />
               </div>
 
@@ -185,9 +252,10 @@ export const UserForm = ({
                 <FormInput
                   name="postalCode"
                   type="text"
-                  value={user.address?.postalCode || ""}
+                  value={user.address.postalCode}
                   onChange={handleInputChange}
                   placeholder="Postal Code"
+                  error={errors.postalCode}
                 />
               </div>
 
@@ -195,13 +263,23 @@ export const UserForm = ({
                 <label htmlFor="state" className="text-gray-700">
                   State:{" "}
                 </label>
-                <FormInput
+                <select
+                  id="state"
                   name="state"
-                  type="text"
-                  value={user.address?.state || ""}
+                  value={user.address.state}
                   onChange={handleInputChange}
-                  placeholder="State"
-                />
+                  className="form-control"
+                >
+                  <option value="">Select a state</option>
+                  {states.map((state) => (
+                    <option key={state} value={state}>
+                      {state}
+                    </option>
+                  ))}
+                </select>
+                {errors.state && (
+                  <p className="text-red-500 text-xs italic">{errors.state}</p>
+                )}
               </div>
             </div>
           </div>

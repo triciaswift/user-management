@@ -69,11 +69,5 @@ export const CreateUser = () => {
     );
   }
 
-  return (
-    <UserForm
-      initialValues={user}
-      onSave={handleCreateUser}
-      setLoading={setLoading}
-    />
-  );
+  return <UserForm initialValues={user} onSave={handleCreateUser} />;
 };
