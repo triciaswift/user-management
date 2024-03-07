@@ -1,11 +1,11 @@
 export interface User {
-  id: number;
+  id?: number;
   firstName: string;
   lastName: string;
   gender: "male" | "female";
   email: string;
   birthDate: string;
-  image: string;
+  image?: string;
   address: {
     address: string;
     city: string;

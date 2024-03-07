@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import { User } from "../../types/User";
 import { getAllUsers } from "../../services/userService";
 import { UserCard } from "./UserCard";
+import { useNavigate } from "react-router-dom";
 
 export const UserList = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -45,9 +48,19 @@ export const UserList = () => {
 
   return (
     <section className="container mx-auto p-6 bg-gray-50">
-      <h1 className="text-2xl font-bold text-center text-gray-800 mb-8">
+      <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">
         Welcome to User Management!
       </h1>
+      <div className="flex justify-center mb-8">
+        <button
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-16 rounded transition duration-300 ease-in-out focus:outline-none focus:shadow-outline"
+          onClick={() => {
+            navigate(`/newUser`);
+          }}
+        >
+          Add User
+        </button>
+      </div>
       <ul className="user--list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {users.map((user) => (
           <UserCard key={user.id} user={user} />
