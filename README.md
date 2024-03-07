@@ -1,46 +1,50 @@
-# Getting Started with Create React App
+# Project: User Management
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Objective
 
-## Available Scripts
+Develop a well-designed user management interface that displays a list of users retrieved from an API. Implement functionality to edit user information using a form.
 
-In the project directory, you can run:
+### Duration
 
-### `npm start`
+Approximately four hours.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Requirements
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+1. **Setup**
+    - Create a new React TypeScript project using the tool of your choice.
+    - Include Tailwind CSS for styling.
+    - Feel free to use third-party libraries.
+2. **API Integration**
+    - Utilize the [dummyJSON Users API](https://dummyjson.com/docs/users) to fetch a list of users.
+    - Prepare a mock `fetch` request for submitting updated user data (the dummyJSON API doesn't support actual data mutation).
+3. **Functionality**
+    - Display a list of twenty users returned from the dummyJSON Users API. The list should display the user’s image, first name, last name, and email address.
+    - Clicking on a user should open a form to edit a subset of the user’s information. This form can appear inline with the list, on a new page, or in a dialog. The form should allow users to edit the following information:
+        - First name
+        - Last name
+        - Email
+        - Date of birth
+        - Gender (male or female)
+        - The US state portion of their address
+    - Include code to submit the edited information using a `fetch` request. This code won’t actually write any information, but should indicate whether the mock mutation has been completed successfully.
+4. **TypeScript Utilization**
+    - Define TypeScript types or interfaces for user data.
+    - Ensure type safety across all components, including data and events.
+5. **Design**
+    - Use Tailwind to create a clean, consistent interface. Focus on simplicity and a clear hierarchy rather than novelty.
+    - Indicate when network requests are in progress (e.g., loading the list of users, processing the update request).
+6. **Additional Features (Optional)**
+    - Implement client-side validation for the edit form. In addition to validating that all fields have values and are of the appropriate type, ensure that birth dates are between 01-01-1900 and 12-31-2100.
+    - Add a feature to add a new user or delete existing users (mock functionality).
 
-### `npm test`
+### Submission
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Submit the source code via a GitHub repository.
 
-### `npm run build`
+### Evaluation Criteria
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- Functionality: Does the application meet the specified requirements?
+- Code Quality: Is the code well-organized, readable, and maintainable?
+- Use of React: Are components and state managed effectively?
+- TypeScript Integration: Is TypeScript used correctly for type safety and data modeling?
+- Styling: Is the UI visually appealing and user-focused?
