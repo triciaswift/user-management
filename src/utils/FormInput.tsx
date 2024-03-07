@@ -5,6 +5,7 @@ type FormInputProps = {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   checked?: boolean;
+  autoFocus?: boolean;
 };
 
 export const FormInput = ({
@@ -14,6 +15,7 @@ export const FormInput = ({
   onChange,
   placeholder,
   checked,
+  autoFocus,
 }: FormInputProps) => {
   switch (type) {
     case "radio":
@@ -25,6 +27,7 @@ export const FormInput = ({
           value={value}
           checked={checked}
           onChange={onChange}
+          className="form-radio text-indigo-600"
           required
         />
       );
@@ -38,8 +41,9 @@ export const FormInput = ({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className="form-control"
+          className="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-blue-300"
           required
+          autoFocus={autoFocus}
         />
       );
   }
