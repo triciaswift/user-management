@@ -1,3 +1,4 @@
+// Array of 50 U.S states
 export const states: string[] = [
   "AL",
   "AK",

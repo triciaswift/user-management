@@ -1,3 +1,4 @@
+// Interface representing a user.
 export interface User {
   id?: number;
   firstName: string;

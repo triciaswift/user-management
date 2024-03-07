@@ -1,24 +1,21 @@
 import { User } from "../types/User";
 
+// Base URL for the users API
 const BASE_URL = "https://dummyjson.com/users";
 
-const checkResponseStatus = (res: Response) => {
-  if (!res.ok) {
-    throw new Error(`HTTP error! status: ${res.status}`);
-  }
-  return res;
-};
-
+// Fetches all users from the API.
 export const getAllUsers = async () => {
-  const res = await fetch(BASE_URL).then(checkResponseStatus);
+  const res = await fetch(BASE_URL);
   return res.json();
 };
 
+// Fetches a single user by their ID.
 export const getUserById = async (id: number) => {
-  const res = await fetch(`${BASE_URL}/${id}`).then(checkResponseStatus);
+  const res = await fetch(`${BASE_URL}/${id}`);
   return res.json();
 };
 
+// Updates a user's information.
 export const editUser = async (user: User) => {
   const res = await fetch(`${BASE_URL}/${user.id}`, {
     method: "PUT",
@@ -26,17 +23,18 @@ export const editUser = async (user: User) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(user),
-  }).then(checkResponseStatus);
+  });
   console.log("Updating user:", user);
   return res;
 };
 
-// mock functionality
+// Adds a new user. (This is a mock function that simulates adding a user.)
 export const addUser = async (user: User) => {
   console.log("Adding user:", user);
   return Promise.resolve({ ...user, id: 31 });
 };
 
+// Deletes a user by their ID. (This is a mock function that simulates deletion.)
 export const deleteUser = async (id: number) => {
   console.log("Deleting user with id:", id);
   return Promise.resolve({ id });
