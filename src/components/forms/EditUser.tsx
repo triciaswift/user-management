@@ -78,11 +78,5 @@ export const EditUser = () => {
       </div>
     );
 
-  return (
-    <UserForm
-      initialValues={user}
-      onSave={handleUserSave}
-      setLoading={setLoading}
-    />
-  );
+  return <UserForm initialValues={user} onSave={handleUserSave} />;
 };

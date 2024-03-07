@@ -6,6 +6,7 @@ type FormInputProps = {
   placeholder?: string;
   checked?: boolean;
   autoFocus?: boolean;
+  error?: string;
 };
 
 export const FormInput = ({
@@ -16,10 +17,13 @@ export const FormInput = ({
   placeholder,
   checked,
   autoFocus,
+  error,
 }: FormInputProps) => {
+  let inputElement;
+
   switch (type) {
     case "radio":
-      return (
+      inputElement = (
         <input
           id={name}
           name={name}
@@ -28,23 +32,25 @@ export const FormInput = ({
           checked={checked}
           onChange={onChange}
           className="form-radio text-indigo-600"
-          required
+          // required
         />
       );
+      break;
     case "email":
-      return (
+      inputElement = (
         <input
           id={name}
           name={name}
-          className="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-blue-300"
+          className="form-control"
           type="email"
           value={value}
           onChange={onChange}
-          required
+          // required
         />
       );
+      break;
     default:
-      return (
+      inputElement = (
         <input
           id={name}
           name={name}
@@ -52,10 +58,18 @@ export const FormInput = ({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-blue-300"
-          required
+          className="form-control"
+          // required
           autoFocus={autoFocus}
         />
       );
+      break;
   }
+
+  return (
+    <div>
+      {inputElement}
+      {error && <p className="text-red-500 text-xs italic">{error}</p>}
+    </div>
+  );
 };
